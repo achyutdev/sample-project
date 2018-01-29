@@ -1,0 +1,23 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'mysql:mysql-connector-java:6.0.6'
+        // classpath 'org.flywaydb:flyway-gradle-plugin:3.1'
+    }
+}
+
+plugins {
+    id "org.flywaydb.flyway" version "5.0.6"
+    id "java"
+}
+
+def MIGRATION_FILE_SRC = "${projectDir}/src/main/resources/db/migration"
+    
+flyway {
+    url = 'jdbc:mysql://localhost:3306/AMARJOITY?useSSL=false'
+    user = 'root'
+    password = 'achyut123'
+    locations = ["filesystem:${MIGRATION_FILE_SRC}/common","filesystem:${MIGRATION_FILE_SRC}/mysql"]
+}
