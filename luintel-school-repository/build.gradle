@@ -4,7 +4,6 @@ buildscript {
     }
     dependencies {
         classpath 'mysql:mysql-connector-java:6.0.6'
-        // classpath 'org.flywaydb:flyway-gradle-plugin:3.1'
     }
 }
 
@@ -14,9 +13,17 @@ plugins {
 }
 
 def MIGRATION_FILE_SRC = "${projectDir}/src/main/resources/db/migration"
-    
+
+def props = new Properties()
+file("src/main/resources/config.properties").withInputStream { 
+    stream -> props.load(stream) 
+    props.each { key, val ->
+        project.set(key, val)
+    }
+}
+
 flyway {
-    url = 'jdbc:mysql://localhost:3306/AMARJOITY?useSSL=false'
+    url = "${DB_URL}:${DB_PORT}/${DB_NAME}?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
     user = 'root'
     password = 'achyut123'
     locations = ["filesystem:${MIGRATION_FILE_SRC}/common","filesystem:${MIGRATION_FILE_SRC}/mysql"]
